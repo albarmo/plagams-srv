@@ -1,13 +1,13 @@
 const collectionRouter = require('express').Router();
-const CategoriesController = require('../controllers/CategoriesControllers');
+const collectionControllers = require('../controllers/collectionControllers');
 const { authorization, authentification } = require('../middleware/Auth');
 
-collectionRouter.get('/', CategoriesController.list);
+collectionRouter.get('/', collectionControllers.list);
 
 collectionRouter.use(authentification);
 collectionRouter.use(authorization);
-collectionRouter.post('/', CategoriesController.create);
-collectionRouter.put('/:id', CategoriesController.update);
-collectionRouter.delete('/:id', CategoriesController.delete);
+collectionRouter.post('/', collectionControllers.create);
+collectionRouter.put('/:id', collectionControllers.update);
+collectionRouter.delete('/:id', collectionControllers.delete);
 
 module.exports = collectionRouter;

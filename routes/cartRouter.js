@@ -1,5 +1,5 @@
 const cartRouter = require('express').Router();
-const CartController = require('../controllers/CartControllers');
+const CartController = require('../controllers/cartControllers');
 const { authentification, authorization } = require('../middleware/Auth');
 
 cartRouter.use(authentification);

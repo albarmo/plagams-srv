@@ -1,5 +1,5 @@
 const wishlistRouter = require('express').Router();
-const WishlistController = require('../controllers/WishlistControllers');
+const WishlistController = require('../controllers/wishlistControllers');
 const { authentification } = require('../middleware/Auth');
 
 wishlistRouter.use(authentification);

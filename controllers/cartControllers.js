@@ -111,10 +111,10 @@ class CartControllers {
       if (cart) {
         const product = await Product.findByPk(ProductId);
 
-        if (requestQuantity > product.dataValues?.stock) {
+        if (requestQuantity > product.dataValues.stock) {
           return res
             .status(200)
-            .json({ message: `Product not in stock, ${product.dataValues?.stock} items remaining` });
+            .json({ message: `Product not in stock, ${product.dataValues.stock} items remaining` });
         } else {
           const updateCart = await Cart.update(
             {

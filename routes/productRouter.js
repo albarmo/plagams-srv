@@ -1,5 +1,5 @@
 const productRouter = require('express').Router();
-const ProductController = require('../controllers/ProductControllers');
+const ProductController = require('../controllers/productControllers');
 const { authorization, authentification } = require('../middleware/Auth');
 
 productRouter.get('/', ProductController.list);

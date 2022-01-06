@@ -1,5 +1,5 @@
 const advertisementRouter = require('express').Router();
-const AdvertisementController = require('../controllers/AdvertisementControllers');
+const AdvertisementController = require('../controllers/advertisementControllers');
 const { authorization, authentification } = require('../middleware/Auth');
 
 advertisementRouter.get('/', AdvertisementController.list);

@@ -47,7 +47,7 @@ class UserController {
       where: { email: inputLogin.email },
     });
 
-    const UserId = user?.dataValues?.id;
+    const UserId = user.dataValues.id;
 
     try {
       if (!user) {
