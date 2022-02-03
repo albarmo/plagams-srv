@@ -58,7 +58,6 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'customer',
       },
       address: {
         type: DataTypes.STRING,
@@ -99,7 +98,7 @@ module.exports = (sequelize, DataTypes) => {
             msg: 'Password cannot be empty',
           },
           len: {
-            args: [5],
+            args: [5, 30],
             msg: 'Minimum length of password is 5',
           },
         },
