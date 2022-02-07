@@ -1,68 +1,69 @@
-const { Wishlist } = require('../models');
+const { Wishlist, Product } = require('../models');
 
 class WishlistControllers {
-  static async list(req, res) {
+  static async list(req, res, next) {
     try {
-      const data = await Wishlist.findAll();
+      const data = await Wishlist.findAll({
+        where: { UserId: req.userData.id },
+        include: [Product],
+      });
       if (data) {
         return res.status(200).json({ data });
       }
     } catch (error) {
-      return res.status(500).json({ message: error.message });
-    }
-  }
-  static async create(req, res) {
-    try {
-      let inputData = {
-        userId: req.body.userId,
-        productId: req.body.productId,
-        date: new Date(),
-      };
-      const newWishlist = await Wishlist.create(inputData);
-      if (newWishlist) {
-        return res.status(201).json({ newWishlist });
-      }
-    } catch (error) {
-      return res.status(500).json({ message: error.message });
+      next(error);
     }
   }
 
-  static async update(req, res) {
+  static async addToWishlist(req, res, next) {
+    let UserId = req.userData.id;
+    let ProductId = req.body.ProductId;
+
+    let inputData = {
+      UserId: UserId,
+      ProductId: ProductId,
+    };
+
     try {
-      const { id } = req.params;
-      let inputData = {
-        userId: req.body.userId,
-        productId: req.body.productId,
-        date: new Date(),
-      };
-      const updateWishlist = await Wishlist.update(inputData, {
+      const existingWishlist = await Wishlist.findOne({
         where: {
-          id: id,
+          UserId,
+          ProductId,
+        },
+      });
+
+      if (existingWishlist) {
+        return res.status(200).json({ message: 'This product already added to wishlist' });
+      } else {
+        const newCart = await Wishlist.create(inputData);
+        if (newCart) {
+          return res.status(201).json({ newCart });
+        }
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async delete(req, res, next) {
+    let UserId = req.userData.id;
+    let ProductId = req.params.ProductId;
+
+    try {
+      const deleteWishlist = await Wishlist.destroy({
+        where: {
+          UserId,
+          ProductId,
         },
         returning: true,
       });
-      if (updateWishlist) {
-        return res.status(201).json({ updateWishlist });
-      }
-    } catch (error) {
-      return res.status(500).json({ message: error });
-    }
-  }
-
-  static async delete(req, res) {
-    const { id } = req.params;
-    try {
-      const deleteWishlist = await Wishlist.destroy({
-        where: { id: id },
-        returning: true,
-      });
       if (deleteWishlist) {
-        return res.status(200).json({ message: `success delete wishlist with id ${id}` });
+        return res.status(200).json({ message: `success removed product from wishlist` });
       } else {
-        return res.status(404).json({ message: `failed, delete wishlist with id ${id} not found` });
+        return res.status(404).json({ message: `failed, product not in wishlist` });
       }
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      next(error);
     }
   }
 }

@@ -2,7 +2,7 @@ const { Collection, Product } = require('../models');
 const uploader = require('../helpers/uploader');
 
 class collectionControllers {
-  static async list(req, res) {
+  static async list(req, res, next) {
     try {
       const collection = await Collection.findAll({
         include: [
@@ -11,18 +11,17 @@ class collectionControllers {
           },
         ],
       });
-      return res.status(400).json({ collection });
+      return res.status(200).json({ collection });
     } catch (error) {
-      return res.status(400).json(error.message);
+      next(error);
     }
   }
 
-  static create(req, res) {
+  static create(req, res, next) {
     try {
       const upload = uploader('COLLECTION_IMAGE').fields([{ name: 'image' }]);
       upload(req, res, (err) => {
         if (err) {
-          console.log('Failed to upload collection image', err);
           return res.status(500).json({ msg: err });
         }
         const { image } = req.files;
@@ -30,31 +29,30 @@ class collectionControllers {
 
         let inputData = {
           title: req.body.title,
-          productId: req.body.productId,
+          ProductId: req.body.ProductId,
+          CategoryId: req.body.CategoryId,
           image: imagePath,
         };
 
         Collection.create(inputData)
           .then((data) => {
-            console.log(data);
             return res.status(201).json({ data });
           })
           .catch((error) => {
-            return res.status(500).json({ message: error });
+            next(error);
           });
       });
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      next(error);
     }
   }
 
-  static update(req, res) {
+  static update(req, res, next) {
     try {
       const { id } = req.params;
       const upload = uploader('COLLECTION_IMAGE').fields([{ name: 'image' }]);
       upload(req, res, (err) => {
         if (err) {
-          console.log('Failed to upload collection image', err);
           return res.status(500).json({ msg: err });
         }
         const { image } = req.files;
@@ -62,7 +60,8 @@ class collectionControllers {
 
         let inputDataUpdate = {
           title: req.body.title,
-          productId: req.body.productId,
+          ProductId: req.body.ProductId,
+          CategoryId: req.body.CategoryId,
           image: imagePath,
         };
         Collection.update(inputDataUpdate, {
@@ -72,18 +71,17 @@ class collectionControllers {
           returning: true,
         })
           .then((data) => {
-            console.log(data);
-            return res.status(201).json({ data });
+            return res.status(200).json({ data });
           })
           .catch((error) => {
-            return res.status(500).json({ message: error });
+            next(error);
           });
       });
     } catch (error) {
-      return res.status(500).json({ message: error });
+      next(error);
     }
   }
-  static async delete(req, res) {
+  static async delete(req, res, next) {
     const { id } = req.params;
     try {
       const deleteCollection = await Collection.destroy({
@@ -94,7 +92,7 @@ class collectionControllers {
       });
       return res.status(200).json({ deleteCollection });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 }

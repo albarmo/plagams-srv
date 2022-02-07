@@ -1,8 +1,9 @@
 const { User } = require('../models');
-const { comparePassword } = require('../helpers/bcrypt');
+const { comparePassword, hashPassword } = require('../helpers/bcrypt');
 const { generateAccessToken } = require('../helpers/jwt');
+
 class UserController {
-  static async list(req, res) {
+  static async list(req, res, next) {
     let data = await User.findAll();
     try {
       if (data) {
@@ -11,11 +12,11 @@ class UserController {
         return res.status(500).json({ message: 'user table empty' });
       }
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
-  static async register(req, res) {
+  static async register(req, res, next) {
     let inputDataRegister = {
       fullname: req.body.fullname,
       email: req.body.email,
@@ -32,11 +33,11 @@ class UserController {
         return res.status(201).json({ data });
       })
       .catch((error) => {
-        return res.status(400).json({ message: error.message });
+        next(error);
       });
   }
 
-  static async login(req, res) {
+  static async login(req, res, next) {
     const inputLogin = {
       email: req.body.email,
       password: req.body.password,
@@ -46,7 +47,7 @@ class UserController {
       where: { email: inputLogin.email },
     });
 
-    const userId = user?.dataValues?.id;
+    const UserId = user.dataValues.id;
 
     try {
       if (!user) {
@@ -55,17 +56,18 @@ class UserController {
         return res.status(401).json({ msg: 'email or password wrong!' });
       } else {
         const accessToken = generateAccessToken({
+          id: user.id,
           email: user.email,
           password: user.password,
         });
-        return res.status(200).json({ accessToken, userId });
+        return res.status(200).json({ accessToken, UserId });
       }
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      next(error);
     }
   }
 
-  static async updateUser(req, res) {
+  static async updateUser(req, res, next) {
     const { id } = req.params;
     const inputDataUpdate = {
       fullname: req.body.fullname,
@@ -75,7 +77,7 @@ class UserController {
       address: req.body.address,
       region: req.body.region,
       gender: req.body.gender,
-      password: req.body.password,
+      password: hashPassword(req.body.password),
     };
 
     try {
@@ -101,11 +103,11 @@ class UserController {
         res.status(404).json({ msg: 'user not found!' });
       }
     } catch (error) {
-      return res.status(500).json({ message: error.message, error });
+      next(error);
     }
   }
 
-  static async deleteUser(req, res) {
+  static async deleteUser(req, res, next) {
     const { id } = req.params;
     try {
       const deleteUser = await User.destroy({
@@ -118,7 +120,7 @@ class UserController {
         return res.status(404).json({ message: `failed, delete user with id ${id} not found` });
       }
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      next(error);
     }
   }
 }

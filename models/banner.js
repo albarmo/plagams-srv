@@ -2,12 +2,12 @@
 const { Model } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
-  class Advertisement extends Model {
+  class Banner extends Model {
     static associate(models) {
       // define association here
     }
   }
-  Advertisement.init(
+  Banner.init(
     {
       title: {
         type: DataTypes.STRING,
@@ -15,7 +15,21 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notEmpty: {
             args: true,
-            msg: 'Adevrtisment name cannot be empty',
+            msg: 'Banner name cannot be empty',
+          },
+        },
+      },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: 'Banner description cannot be empty',
+          },
+          len: {
+            args: [0, 500],
+            msg: 'Minimum character of banner description is more than 0 and less than 500',
           },
         },
       },
@@ -25,27 +39,17 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notEmpty: {
             args: true,
-            msg: 'Adevrtisment name cannot be empty',
+            msg: 'Banner target cannot be empty',
           },
         },
       },
-      expiredDate: {
+      date: {
         type: DataTypes.DATE,
         allowNull: false,
         validate: {
           notEmpty: {
             args: true,
-            msg: 'Adevrtisment expired date cannot be empty',
-          },
-        },
-      },
-      startDate: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'Adevrtisment start date cannot be empty',
+            msg: 'Banner date cannot be empty',
           },
         },
       },
@@ -55,7 +59,17 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notEmpty: {
             args: true,
-            msg: 'Advertisement url cannot be empty',
+            msg: 'Banner file cannot be empty',
+          },
+        },
+      },
+      isActive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: 'Banner status isActive cannot be empty',
           },
         },
       },
@@ -67,8 +81,8 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       sequelize,
-      modelName: 'Advertisement',
+      modelName: 'Banner',
     }
   );
-  return Advertisement;
+  return Banner;
 };

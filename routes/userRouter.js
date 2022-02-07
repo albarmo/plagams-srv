@@ -1,10 +1,15 @@
 const userRouter = require('express').Router();
-const userController = require('../controllers/userControllers');
+const UserController = require('../controllers/userControllers');
+const { authorization, authentification } = require('../middleware/Auth');
 
-userRouter.get('/', userController.list);
-userRouter.post('/register', userController.register);
-userRouter.post('/login', userController.login);
-userRouter.put('/:id', userController.updateUser);
-userRouter.delete('/:id', userController.deleteUser);
+userRouter.post('/register', UserController.register);
+userRouter.post('/login', UserController.login);
+
+userRouter.use(authentification);
+userRouter.put('/:id', UserController.updateUser);
+
+userRouter.use(authorization);
+userRouter.get('/', UserController.list);
+userRouter.delete('/:id', UserController.deleteUser);
 
 module.exports = userRouter;

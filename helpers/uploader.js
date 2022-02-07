@@ -6,13 +6,11 @@ const uploader = (fileNamePrefix) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       if (fs.existsSync(defaultPath)) {
-        console.log(defaultPath, 'directory ada');
         cb(null, defaultPath);
       } else {
         fs.mkdir(defaultPath, { recursive: true }, (err) => {
           cb(err, defaultPath);
         });
-        console.log('directory ga ada buat directory', defaultPath);
       }
     },
     filename: (req, file, cb) => {

@@ -1,9 +1,13 @@
 const advertisementRouter = require('express').Router();
-const advertisementController = require('../controllers/advertisementControllers');
+const AdvertisementController = require('../controllers/advertisementControllers');
+const { authorization, authentification } = require('../middleware/Auth');
 
-advertisementRouter.get('/', advertisementController.list);
-advertisementRouter.post('/', advertisementController.create);
-advertisementRouter.put('/:id', advertisementController.update);
-advertisementRouter.delete('/:id', advertisementController.delete);
+advertisementRouter.get('/', AdvertisementController.list);
+
+advertisementRouter.use(authentification);
+advertisementRouter.use(authorization);
+advertisementRouter.post('/', AdvertisementController.create);
+advertisementRouter.put('/:id', AdvertisementController.update);
+advertisementRouter.delete('/:id', AdvertisementController.delete);
 
 module.exports = advertisementRouter;

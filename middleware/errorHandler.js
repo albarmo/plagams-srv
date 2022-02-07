@@ -1,37 +1,48 @@
-const errorHandler = (err, req, res, next) => {
+function errorHandler(err, req, res, next) {
+  let msg = '';
+  let code = '';
+
   switch (err.name) {
-    case "Unauthorized":
-      res.status(401).json({
-        name: "Unauthorized",
-        message: err.message,
+    case 'SequelizeValidationError':
+      let errors = [];
+      err.errors.forEach((el) => {
+        errors.push(el.message);
       });
+      code = 400;
+      msg = `${errors}`;
       break;
-    case "SequelizeValidationError":
-      res.status(400).json({
-        name: "Bad Request",
-        message: [{ message: err.message }],
+
+    case 'SequelizeUniqueConstraintError':
+      let errors2 = [];
+      err.errors.forEach((el) => {
+        errors2.push(el.message);
       });
+      code = 400;
+      msg = `${errors2}`;
       break;
-    case "Forbidden":
-      res.status(403).json({
-        name: "Forbidden",
-        message: "You do not have access!",
-      });
+
+    case 'Wrong Email or Password':
+      code = 404;
+      msg = 'Wrong Email or Password';
       break;
-    case "Not Found":
-      res.status(404).json({
-        name: "Not found",
-        message: err.message,
-      });
+
+    case 'Unauthenticated':
+      code = 401;
+      msg = 'Unauthenticated. You need to login first';
       break;
+
+    case 'Not Authorized':
+      code = 403;
+      msg = 'You are not Authorized';
+      break;
+
     default:
-      status = 500;
-      res.status(status).json({
-        name: err.name,
-        message: err.message,
-      });
+      code = 500;
+      msg = err.message;
       break;
   }
-};
+
+  return res.status(code).json({ msg });
+}
 
 module.exports = errorHandler;

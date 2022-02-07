@@ -1,31 +1,28 @@
-const jwt = require("jsonwebtoken");
-const secret_key = "abcd1234";
-const { User } = require("../models");
+const { verifyToken } = require('../helpers/jwt');
+const { User } = require('../models');
 
-function authentication(req, res, next) {
+function authentification(req, res, next) {
   const { access_token } = req.headers;
   if (access_token) {
-    let decode = jwt.verify(access_token, secret_key);
-    console.log(decode);
+    let decode = verifyToken(access_token);
     req.userData = decode;
     next();
   } else {
-    next({ name: "Unauthenticated" });
+    next({ name: 'Unauthenticated' });
   }
 }
 
 function authorization(req, res, next) {
   User.findByPk(req.userData.id)
     .then((user) => {
-      if (user.role == "admin") {
+      if (user.type == 'admin') {
         next();
       } else {
-        next({ name: "Not Authorized" });
+        next({ name: 'Not Authorized' });
       }
     })
     .catch((err) => {
       next(err);
     });
 }
-
-module.exports = { authentication, authorization };
+module.exports = { authentification, authorization };
