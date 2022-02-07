@@ -10,7 +10,7 @@ module.exports = {
         {
           id: uuidv4(),
           fullname: 'superadmin-magin-1',
-          email: 'servermagin@gmail.com ',
+          email: 'servermagin@gmail.com',
           phone: '085692495134',
           address: '403 George Ave.Shakopee, MN 55379',
           region: 'Indonesia',
