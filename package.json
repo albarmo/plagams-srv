@@ -1,5 +1,5 @@
 {
-  "name": "magin-server",
+  "name": "plagams-srv",
   "version": "1.0.0",
   "description": "Backend for Magin E - Commerence",
   "main": "index.js",
@@ -14,10 +14,9 @@
     ]
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon ./bin/www",
     "test": "jest --detectOpenHandles --verbose false --forceExit --coverage",
-    "prepare": "husky install",
-    "dev": "nodemon ./bin/www"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -31,11 +30,12 @@
   },
   "homepage": "https://github.com/albarmo/magin-server#readme",
   "dependencies": {
+    "axios": "^0.26.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "eslint-config-airbnb": "^19.0.2",
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "jest": "^27.4.5",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",

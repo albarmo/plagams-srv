@@ -1,6 +1,6 @@
-# Magin-server
+# Plagams-server
 
-Backend for Magin E - Commerence, this app using postgres as database.
+Backend for Plagams Store, this app using postgres as database.
 
 ## How to run development mode
 

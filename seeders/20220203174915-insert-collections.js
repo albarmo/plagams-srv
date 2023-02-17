@@ -8,15 +8,13 @@ module.exports = {
       [
         {
           id: '966c3c31-6af4-4ca2-b6d0-f6de962895b8',
-          productId: null,
-          title: 'New Born',
+          title: 'Collection 1',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           id: uuidv4(),
-          productId: null,
-          title: 'Teen',
+          title: 'Collection 2',
           createdAt: new Date(),
           updatedAt: new Date(),
         },

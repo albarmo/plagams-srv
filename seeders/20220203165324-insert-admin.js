@@ -9,13 +9,13 @@ module.exports = {
       [
         {
           id: uuidv4(),
-          fullname: 'superadmin-magin-1',
-          email: 'servermagin@gmail.com',
+          fullname: 'Superadmin Plagams',
+          email: 'administrator@plagams.store',
           phone: '085692495134',
           address: '403 George Ave.Shakopee, MN 55379',
           region: 'Indonesia',
           gender: 'male',
-          password: hashPassword('Magin2022!'),
+          password: hashPassword('PlagaMS2023!'),
           type: 'admin',
           createdAt: new Date(),
           updatedAt: new Date(),

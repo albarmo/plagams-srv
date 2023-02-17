@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const App = express();
 const cors = require('cors');
-const port = process.env.PORT || 3002;
+const PORT = process.env.PORT || 8080;
 const logger = require('morgan');
 const routes = require('./routes');
 const errorHandler = require('./middleware/errorHandler');
@@ -18,7 +18,7 @@ App.use(routes);
 App.use(errorHandler);
 
 App.get('/', (req, res) => {
-  return res.status(200).json({ ServerStatus: `Running` });
+  return res.status(200).json({ status_message: `PLAGAMS_SRV is running on port ${PORT}` });
 });
 
 // Define the static file path
@@ -27,8 +27,8 @@ App.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
-App.listen(port, () => {
-  console.log(`This Server running on port ${port}`);
+App.listen(PORT, () => {
+  console.log(`This Server running on port ${PORT}`);
 });
 
 module.exports = App;
