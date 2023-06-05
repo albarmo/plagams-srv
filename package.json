@@ -14,7 +14,7 @@
     ]
   },
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "node ./bin/www",
     "test": "jest --detectOpenHandles --verbose false --forceExit --coverage",
     "prepare": "husky install"
   },
